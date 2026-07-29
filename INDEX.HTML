@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Configuración para que parezca una App Nativa en iOS y Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mood Control">
+    <meta name="theme-color" content="#0d0b18">
+    
+    <title>Mood Tracker 🌈</title>
+    <style>
+        :root {
+            --bg-dark: #0f0c1b;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.15);
+            --text: #ffffff;
+            --happy-color: #00ff87;
+            --anger-color: #ff0055;
+            --glow-happy: rgba(0, 255, 135, 0.5);
+            --glow-anger: rgba(255, 0, 85, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #241442 0%, #0d0b18 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .app-container {
+            max-width: 480px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff007f, #7928ca, #00dfd8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #b3b3b3;
+            margin-top: 4px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 15px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #e1e1e1;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .emoji-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 14px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            touch-action: manipulation;
+        }
+
+        .emoji-btn .icon {
+            font-size: 38px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+
+        .emoji-btn.happy-type .icon { animation: floatBounce 2.5s infinite ease-in-out; }
+        .emoji-btn.anger-type .icon { animation: shakeAnger 1.8s infinite ease-in-out; }
+
+        .emoji-btn .label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ddd;
+        }
+
+        .emoji-btn:active { transform: scale(0.92); }
+
+        .emoji-btn.happy-type.active {
+            border-color: var(--happy-color);
+            box-shadow: 0 0 20px var(--glow-happy);
+            background: rgba(0, 255, 135, 0.15);
+            transform: scale(1.05);
+        }
+
+        .emoji-btn.anger-type.active {
+            border-color: var(--anger-color);
+            box-shadow: 0 0 20px var(--glow-anger);
+            background: rgba(255, 0, 85, 0.15);
+            transform: scale(1.05);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            color: #fff;
+            margin-bottom: 16px;
+            font-size: 14px;
+            outline: none;
+            user-select: text;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #ff007f, #7928ca);
+            color: white;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 0, 127, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit:disabled {
+            background: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 12px 6px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-box .title { font-size: 10px; color: #aaa; margin-bottom: 6px; font-weight: 700; }
+        .stat-box .counts { display: flex; justify-content: space-around; font-size: 13px; font-weight: 800; }
+        .text-happy { color: var(--happy-color); }
+        .text-anger { color: var(--anger-color); }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 4px solid #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .history-item.happy { border-left-color: var(--happy-color); }
+        .history-item.anger { border-left-color: var(--anger-color); }
+
+        .history-info { display: flex; align-items: center; gap: 10px; }
+        .history-emoji { font-size: 26px; }
+        .history-text .label { font-size: 13px; font-weight: 700; }
+        .history-text .note { font-size: 11px; color: #bbb; margin-top: 2px; }
+        .history-time { font-size: 11px; color: #888; }
+
+        @keyframes floatBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        @keyframes shakeAnger { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+        @keyframes pulseGlow { from { filter: drop-shadow(0 0 2px rgba(255, 0, 127, 0.2)); } to { filter: drop-shadow(0 0 8px rgba(0, 223, 216, 0.6)); } }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h1>Mood Control 💖</h1>
+            <p>Monitoreo diario de emociones</p>
+        </header>
+
+        <div class="card">
+            <h2>✨ Registro de Estado</h2>
+            
+            <div class="emoji-grid">
+                <div class="emoji-btn happy-type" onclick="selectMood('Radiante', '🤩', 'happy', this)">
+                    <span class="icon">🤩</span><span class="label">Radiante</span>
+                </div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Muy Feliz', '😊', 'happy', this)">
+                    <span class="icon">😊</span><span class="label">Feliz</span>
+                </div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Tranquilo', '🙂', 'happy', this)">
+                    <span class="icon">🙂</span><span class="label">Tranquilo</span>
+                </div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Molesto', '😤', 'anger', this)">
+                    <span class="icon">😤</span><span class="label">Molesto</span>
+                </div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Enojado', '😠', 'anger', this)">
+                    <span class="icon">😠</span><span class="label">Enojado</span>
+                </div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Furia', '😡', 'anger', this)">
+                    <span class="icon">😡</span><span class="label">Furia</span>
+                </div>
+            </div>
+
+            <input type="text" id="noteInput" placeholder="Añadir nota breve (opcional)...">
+            <button class="btn-submit" id="btnSubmit" onclick="saveMood()">GUARDAR ESTADO</button>
+        </div>
+
+        <div class="card">
+            <h2>📊 Resumen de Control</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="title">HOY</div>
+                    <div class="counts">
+                        <span class="text-happy" id="dayHappy">0 😊</span>
+                        <span class="text-anger" id="dayAnger">0 😡</span>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">30 DÍAS</div>
+                    <div class="counts">
+                        <span class="text-happy" id="monthHappy">0 😊</span>
+                        <span class="text-anger" id="monthAnger">0 😡</span>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">TOTAL</div>
+                    <div class="counts">
+                        <span class="text-happy" id="totalHappy">0 😊</span>
+                        <span class="text-anger" id="totalAnger">0 😡</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📜 Últimos Registros</h2>
+            <div class="history-list" id="historyList"></div>
+        </div>
+    </div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyeRtKPVFsdsb0zN6UwHCXcGOmUyIwyojTY4K3TYCXC4q0xL_h29hVt6kZtPnJOmM4S/exec";
+
+        let selectedMoodData = null;
+
+        function triggerHaptic() {
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+        }
+
+        function selectMood(label, emoji, type, element) {
+            triggerHaptic();
+            document.querySelectorAll('.emoji-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            selectedMoodData = { label, emoji, type };
+        }
+
+        async function saveMood() {
+            triggerHaptic();
+            if (!selectedMoodData) {
+                alert('Por favor selecciona una emoción 😊 / 😡');
+                return;
+            }
+
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'GUARDANDO...';
+
+            const note = document.getElementById('noteInput').value.trim();
+            const newEntry = {
+                id: Date.now(),
+                label: selectedMoodData.label,
+                emoji: selectedMoodData.emoji,
+                type: selectedMoodData.type,
+                note: note,
+                timestamp: new Date().toISOString()
+            };
+
+            const logs = JSON.parse(localStorage.getItem('mood_logs') || '[]');
+            logs.unshift(newEntry);
+            localStorage.setItem('mood_logs', JSON.stringify(logs));
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newEntry)
+                });
+            } catch (e) {
+                console.error("Error al enviar a la plantilla:", e);
+            }
+
+            document.getElementById('noteInput').value = '';
+            document.querySelectorAll('.emoji-btn').forEach(btn => btn.classList.remove('active'));
+            selectedMoodData = null;
+
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = 'GUARDAR ESTADO';
+
+            renderApp();
+        }
+
+        function renderApp() {
+            const logs = JSON.parse(localStorage.getItem('mood_logs') || '[]');
+            const now = new Date();
+
+            let dayH = 0, dayA = 0;
+            let monthH = 0, monthA = 0;
+            let totalH = 0, totalA = 0;
+
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+
+            logs.forEach((log, index) => {
+                const date = new Date(log.timestamp);
+                const diffDays = (now - date) / (1000 * 60 * 60 * 24);
+
+                if (log.type === 'happy') totalH++; else totalA++;
+
+                if (date.toDateString() === now.toDateString()) {
+                    if (log.type === 'happy') dayH++; else dayA++;
+                }
+
+                if (diffDays <= 30) {
+                    if (log.type === 'happy') monthH++; else monthA++;
+                }
+
+                if (index < 8) {
+                    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + 
+                                    ' (' + date.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ')';
+                    
+                    const item = document.createElement('div');
+                    item.className = `history-item ${log.type}`;
+                    item.innerHTML = `
+                        <div class="history-info">
+                            <span class="history-emoji">${log.emoji}</span>
+                            <div class="history-text">
+                                <div class="label">${log.label}</div>
+                                ${log.note ? `<div class="note">"${log.note}"</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="history-time">${timeStr}</div>
+                    `;
+                    historyList.appendChild(item);
+                }
+            });
+
+            document.getElementById('dayHappy').textContent = `${dayH} 😊`;
+            document.getElementById('dayAnger').textContent = `${dayA} 😡`;
+            document.getElementById('monthHappy').textContent = `${monthH} 😊`;
+            document.getElementById('monthAnger').textContent = `${monthA} 😡`;
+            document.getElementById('totalHappy').textContent = `${totalH} 😊`;
+            document.getElementById('totalAnger').textContent = `${totalA} 😡`;
+
+            if (logs.length === 0) {
+                historyList.innerHTML = '<div style="text-align:center; color:#777; font-size:13px; padding:15px;">Sin registros aún.</div>';
+            }
+        }
+
+        renderApp();
+    </script>
+</body>
+</html>
