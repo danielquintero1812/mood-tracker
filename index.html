@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- Configuración para que parezca una App Nativa en iOS y Android -->
+    <!-- Configuración para App Nativa en iOS y Android -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mood Control">
@@ -43,7 +43,7 @@
         }
 
         .app-container {
-            max-width: 480px;
+            max-width: 520px;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -91,15 +91,27 @@
         .emoji-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 16px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* Estilo personalizado para la barra de desplazamiento */
+        .emoji-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+        .emoji-grid::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
         }
 
         .emoji-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid transparent;
-            border-radius: 20px;
-            padding: 14px 8px;
+            border-radius: 16px;
+            padding: 10px 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -109,8 +121,8 @@
         }
 
         .emoji-btn .icon {
-            font-size: 38px;
-            margin-bottom: 6px;
+            font-size: 32px;
+            margin-bottom: 4px;
             display: inline-block;
         }
 
@@ -118,25 +130,27 @@
         .emoji-btn.anger-type .icon { animation: shakeAnger 1.8s infinite ease-in-out; }
 
         .emoji-btn .label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #ddd;
+            text-align: center;
+            line-height: 1.2;
         }
 
         .emoji-btn:active { transform: scale(0.92); }
 
         .emoji-btn.happy-type.active {
             border-color: var(--happy-color);
-            box-shadow: 0 0 20px var(--glow-happy);
+            box-shadow: 0 0 15px var(--glow-happy);
             background: rgba(0, 255, 135, 0.15);
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .emoji-btn.anger-type.active {
             border-color: var(--anger-color);
-            box-shadow: 0 0 20px var(--glow-anger);
+            box-shadow: 0 0 15px var(--glow-anger);
             background: rgba(255, 0, 85, 0.15);
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         input[type="text"] {
@@ -218,8 +232,8 @@
         .history-text .note { font-size: 11px; color: #bbb; margin-top: 2px; }
         .history-time { font-size: 11px; color: #888; }
 
-        @keyframes floatBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        @keyframes shakeAnger { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+        @keyframes floatBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        @keyframes shakeAnger { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(2px); } }
         @keyframes pulseGlow { from { filter: drop-shadow(0 0 2px rgba(255, 0, 127, 0.2)); } to { filter: drop-shadow(0 0 8px rgba(0, 223, 216, 0.6)); } }
     </style>
 </head>
@@ -235,24 +249,122 @@
             <h2>✨ Registro de Estado</h2>
             
             <div class="emoji-grid">
-                <div class="emoji-btn happy-type" onclick="selectMood('Radiante', '🤩', 'happy', this)">
-                    <span class="icon">🤩</span><span class="label">Radiante</span>
-                </div>
-                <div class="emoji-btn happy-type" onclick="selectMood('Muy Feliz', '😊', 'happy', this)">
-                    <span class="icon">😊</span><span class="label">Feliz</span>
-                </div>
-                <div class="emoji-btn happy-type" onclick="selectMood('Tranquilo', '🙂', 'happy', this)">
-                    <span class="icon">🙂</span><span class="label">Tranquilo</span>
-                </div>
-                <div class="emoji-btn anger-type" onclick="selectMood('Molesto', '😤', 'anger', this)">
-                    <span class="icon">😤</span><span class="label">Molesto</span>
-                </div>
-                <div class="emoji-btn anger-type" onclick="selectMood('Enojado', '😠', 'anger', this)">
-                    <span class="icon">😠</span><span class="label">Enojado</span>
-                </div>
-                <div class="emoji-btn anger-type" onclick="selectMood('Furia', '😡', 'anger', this)">
-                    <span class="icon">😡</span><span class="label">Furia</span>
-                </div>
+                <!-- ALEGRÍA Y SENTIMIENTOS -->
+                <div class="emoji-btn happy-type" onclick="selectMood('Alegría', '😃', 'happy', this)"><span class="icon">😃</span><span class="label">Alegría</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Feliz', '😊', 'happy', this)"><span class="icon">😊</span><span class="label">Feliz</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Afecto', '🥰', 'happy', this)"><span class="icon">🥰</span><span class="label">Afecto</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Entusiasmo', '✨', 'happy', this)"><span class="icon">✨</span><span class="label">Entusiasmo</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Ilusión', '🤩', 'happy', this)"><span class="icon">🤩</span><span class="label">Ilusión</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Satisfacción', '😌', 'happy', this)"><span class="icon">😌</span><span class="label">Satisfacción</span></div>
+
+                <!-- TRISTEZA Y SENTIMIENTOS -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Tristeza', '😢', 'anger', this)"><span class="icon">😢</span><span class="label">Tristeza</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Desolación', '💔', 'anger', this)"><span class="icon">💔</span><span class="label">Desolación</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Melancolía', '🌧️', 'anger', this)"><span class="icon">🌧️</span><span class="label">Melancolía</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Nostalgia', '🥺', 'anger', this)"><span class="icon">🥺</span><span class="label">Nostalgia</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Pena', '🥀', 'anger', this)"><span class="icon">🥀</span><span class="label">Pena</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Soledad', '🌫️', 'anger', this)"><span class="icon">🌫️</span><span class="label">Soledad</span></div>
+
+                <!-- IRA Y SENTIMIENTOS -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Ira', '😡', 'anger', this)"><span class="icon">😡</span><span class="label">Ira</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Rabia', '💥', 'anger', this)"><span class="icon">💥</span><span class="label">Rabia</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Resentimiento', '🔥', 'anger', this)"><span class="icon">🔥</span><span class="label">Resentimiento</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Frustración', '😾', 'anger', this)"><span class="icon">😾</span><span class="label">Frustración</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Indignación', '😤', 'anger', this)"><span class="icon">😤</span><span class="label">Indignación</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Rencor', '😒', 'anger', this)"><span class="icon">😒</span><span class="label">Rencor</span></div>
+
+                <!-- MIEDO Y SENTIMIENTOS -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Miedo', '😨', 'anger', this)"><span class="icon">😨</span><span class="label">Miedo</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Angustia', '😟', 'anger', this)"><span class="icon">😟</span><span class="label">Angustia</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Inseguridad', '😰', 'anger', this)"><span class="icon">😰</span><span class="label">Inseguridad</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Desesperanza', '🌧️', 'anger', this)"><span class="icon">🌧️</span><span class="label">Desesperanza</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Ansiedad', '⏳', 'anger', this)"><span class="icon">⏳</span><span class="label">Ansiedad</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Vulnerabilidad', '🛡️', 'anger', this)"><span class="icon">🛡️</span><span class="label">Vulnerabilidad</span></div>
+
+                <!-- ASCO Y SENTIMIENTOS -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Asco', '🤢', 'anger', this)"><span class="icon">🤢</span><span class="label">Asco</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Repulsión', '🤮', 'anger', this)"><span class="icon">🤮</span><span class="label">Repulsión</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Rechazo', '🚯', 'anger', this)"><span class="icon">🚯</span><span class="label">Rechazo</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Desprecio', '😒', 'anger', this)"><span class="icon">😒</span><span class="label">Desprecio</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Aversión', '🙅‍♂️', 'anger', this)"><span class="icon">🙅‍♂️</span><span class="label">Aversión</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Antipatía', '🚫', 'anger', this)"><span class="icon">🚫</span><span class="label">Antipatía</span></div>
+
+                <!-- SORPRESA Y SENTIMIENTOS -->
+                <div class="emoji-btn happy-type" onclick="selectMood('Sorpresa', '😲', 'happy', this)"><span class="icon">😲</span><span class="label">Sorpresa</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Curiosidad', '🧐', 'happy', this)"><span class="icon">🧐</span><span class="label">Curiosidad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Asombro', '🤩', 'happy', this)"><span class="icon">🤩</span><span class="label">Asombro</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Perplejidad', '🤯', 'happy', this)"><span class="icon">🤯</span><span class="label">Perplejidad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Desconcierto', '⚡', 'happy', this)"><span class="icon">⚡</span><span class="label">Desconcierto</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Fascinación', '🎈', 'happy', this)"><span class="icon">🎈</span><span class="label">Fascinación</span></div>
+
+                <!-- AMOR Y SENTIMIENTOS -->
+                <div class="emoji-btn happy-type" onclick="selectMood('Amor', '❤️', 'happy', this)"><span class="icon">❤️</span><span class="label">Amor</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Cariño', '🥰', 'happy', this)"><span class="icon">🥰</span><span class="label">Cariño</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Empatía', '🤝', 'happy', this)"><span class="icon">🤝</span><span class="label">Empatía</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Ternura', '💖', 'happy', this)"><span class="icon">💖</span><span class="label">Ternura</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Devoción', '🕯️', 'happy', this)"><span class="icon">🕯️</span><span class="label">Devoción</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Aprecio', '💘', 'happy', this)"><span class="icon">💘</span><span class="label">Aprecio</span></div>
+
+                <!-- GRATITUD Y SENTIMIENTOS -->
+                <div class="emoji-btn happy-type" onclick="selectMood('Gratitud', '🙏', 'happy', this)"><span class="icon">🙏</span><span class="label">Gratitud</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Paz', '🕊️', 'happy', this)"><span class="icon">🕊️</span><span class="label">Paz</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Reconoci...', '🌿', 'happy', this)"><span class="icon">🌿</span><span class="label">Reconocimiento</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Humildad', '🤲', 'happy', this)"><span class="icon">🤲</span><span class="label">Humildad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Plenitud', '🌸', 'happy', this)"><span class="icon">🌸</span><span class="label">Plenitud</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Valoración', '✨', 'happy', this)"><span class="icon">✨</span><span class="label">Valoración</span></div>
+
+                <!-- COMPASIÓN Y SENTIMIENTOS -->
+                <div class="emoji-btn happy-type" onclick="selectMood('Compasión', '🥹', 'happy', this)"><span class="icon">🥹</span><span class="label">Compasión</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Piedad', '🫂', 'happy', this)"><span class="icon">🫂</span><span class="label">Piedad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Solidaridad', '🤝', 'happy', this)"><span class="icon">🤝</span><span class="label">Solidaridad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Misericordia', '🤍', 'happy', this)"><span class="icon">🤍</span><span class="label">Misericordia</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Protección', '🛡️', 'happy', this)"><span class="icon">🛡️</span><span class="label">Protección</span></div>
+
+                <!-- CULPA Y SENTIMIENTOS -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Culpa', '😔', 'anger', this)"><span class="icon">😔</span><span class="label">Culpa</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Remordimiento', '⚖️', 'anger', this)"><span class="icon">⚖️</span><span class="label">Remordimiento</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Pesar', '💔', 'anger', this)"><span class="icon">💔</span><span class="label">Pesar</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Autoexigencia', '🌧️', 'anger', this)"><span class="icon">🌧️</span><span class="label">Autoexigencia</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Arrepentimiento', '🙇‍♂️', 'anger', this)"><span class="icon">🙇‍♂️</span><span class="label">Arrepentimiento</span></div>
+
+                <!-- VERGÜENZA Y SENTIMIENTOS -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Vergüenza', '😳', 'anger', this)"><span class="icon">😳</span><span class="label">Vergüenza</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Ridículo', '🙈', 'anger', this)"><span class="icon">🙈</span><span class="label">Ridículo</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Incomodidad', '🫣', 'anger', this)"><span class="icon">🫣</span><span class="label">Incomodidad</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Humillación', '🌫️', 'anger', this)"><span class="icon">🌫️</span><span class="label">Humillación</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Timidez', '🥀', 'anger', this)"><span class="icon">🥀</span><span class="label">Timidez</span></div>
+
+                <!-- ORGULLO Y SENTIMIENTOS -->
+                <div class="emoji-btn happy-type" onclick="selectMood('Orgullo', '🦁', 'happy', this)"><span class="icon">🦁</span><span class="label">Orgullo</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Autoestima', '👑', 'happy', this)"><span class="icon">👑</span><span class="label">Autoestima</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Dignidad', '🏆', 'happy', this)"><span class="icon">🏆</span><span class="label">Dignidad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Realización', '🌟', 'happy', this)"><span class="icon">🌟</span><span class="label">Realización</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Honor', '😎', 'happy', this)"><span class="icon">😎</span><span class="label">Honor</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Confianza', '🚀', 'happy', this)"><span class="icon">🚀</span><span class="label">Confianza</span></div>
+
+                <!-- ENVIDIA Y CELOS -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Envidia', '😒', 'anger', this)"><span class="icon">😒</span><span class="label">Envidia</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Codicia', '🦹', 'anger', this)"><span class="icon">🦹</span><span class="label">Codicia</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Amargura', '🥀', 'anger', this)"><span class="icon">🥀</span><span class="label">Amargura</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Celos', '🤨', 'anger', this)"><span class="icon">🤨</span><span class="label">Celos</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Posesividad', '🔐', 'anger', this)"><span class="icon">🔐</span><span class="label">Posesividad</span></div>
+
+                <!-- ESPERANZA Y ALIVIO -->
+                <div class="emoji-btn happy-type" onclick="selectMood('Esperanza', '🌱', 'happy', this)"><span class="icon">🌱</span><span class="label">Esperanza</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Optimismo', '☀️', 'happy', this)"><span class="icon">☀️</span><span class="label">Optimismo</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Fe', '✨', 'happy', this)"><span class="icon">✨</span><span class="label">Fe</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Alivio', '😌', 'happy', this)"><span class="icon">😌</span><span class="label">Alivio</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Tranquilidad', '🧘', 'happy', this)"><span class="icon">🧘</span><span class="label">Tranquilidad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Liberación', '🔓', 'happy', this)"><span class="icon">🔓</span><span class="label">Liberación</span></div>
+
+                <!-- ESTADOS Y FRUSTRACIÓN -->
+                <div class="emoji-btn anger-type" onclick="selectMood('Bloqueo', '😤', 'anger', this)"><span class="icon">😤</span><span class="label">Bloqueo</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Tensión', '⚡', 'anger', this)"><span class="icon">⚡</span><span class="label">Tensión</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Añoranza', '📻', 'anger', this)"><span class="icon">📻</span><span class="label">Añoranza</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Serenidad', '🧘', 'happy', this)"><span class="icon">🧘</span><span class="label">Serenidad</span></div>
+                <div class="emoji-btn happy-type" onclick="selectMood('Paz Interior', '🕊️', 'happy', this)"><span class="icon">🕊️</span><span class="label">Paz Interior</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Odio', '🖤', 'anger', this)"><span class="icon">🖤</span><span class="label">Odio</span></div>
+                <div class="emoji-btn anger-type" onclick="selectMood('Hostilidad', '⚔️', 'anger', this)"><span class="icon">⚔️</span><span class="label">Hostilidad</span></div>
             </div>
 
             <input type="text" id="noteInput" placeholder="Añadir nota breve (opcional)...">
@@ -313,7 +425,7 @@
         async function saveMood() {
             triggerHaptic();
             if (!selectedMoodData) {
-                alert('Por favor selecciona una emoción 😊 / 😡');
+                alert('Por favor selecciona una emoción o sentimiento 😊 / 😡');
                 return;
             }
 
@@ -416,4 +528,4 @@
         renderApp();
     </script>
 </body>
-</html>
+</html>   
